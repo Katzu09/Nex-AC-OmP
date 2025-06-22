@@ -981,9 +981,9 @@ ac_fpublic ac_AddPlayerClass(classid, Float:spawn_x, Float:spawn_y, Float:spawn_
 	return 1;
 }
 
-ac_fpublic ac_SetSpawnInfo(playerid, team, skin, Float:ac_x, Float:ac_y, Float:ac_z, Float:rotation, WEAPON:weapon1, weapon1_ammo, WEAPON:weapon2, weapon2_ammo, WEAPON:weapon3, weapon3_ammo)
+ac_fpublic bool:ac_SetSpawnInfo(playerid, team, skin, Float:ac_x, Float:ac_y, Float:ac_z, Float:rotation, WEAPON:weapon1, weapon1_ammo, WEAPON:weapon2, weapon2_ammo, WEAPON:weapon3, weapon3_ammo)
 {
-	if(!SetSpawnInfo(playerid, team, skin, ac_x, ac_y, ac_z, rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)) return 0;
+	if(!SetSpawnInfo(playerid, team, skin, ac_x, ac_y, ac_z, rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)) return false;
 	ACInfo[playerid][acSpawnPosX] = ac_x;
 	ACInfo[playerid][acSpawnPosY] = ac_y;
 	ACInfo[playerid][acSpawnPosZ] = ac_z;
@@ -993,7 +993,7 @@ ac_fpublic ac_SetSpawnInfo(playerid, team, skin, Float:ac_x, Float:ac_y, Float:a
 	ACInfo[playerid][acSpawnAmmo2] = weapon2_ammo;
 	ACInfo[playerid][acSpawnWeapon3] = weapon3;
 	ACInfo[playerid][acSpawnAmmo3] = weapon3_ammo;
-	return 1;
+	return true;
 }
 
 ac_fpublic ac_CreatePickup(pickupid, modelid, type, Float:ac_X, Float:ac_Y, Float:ac_Z)
@@ -2199,9 +2199,9 @@ stock bool:orig_SetSpawnInfo(playerid, team, skin, Float:x, Float:y, Float:z, Fl
 stock bool:acc_SetSpawnInfo(playerid, team, skin, Float:x, Float:y, Float:z, Float:rotation, WEAPON:weapon1 = WEAPON_FIST, weapon1_ammo, WEAPON:weapon2 = WEAPON_FIST, weapon2_ammo, WEAPON:weapon3 = WEAPON_FIST, weapon3_ammo)
 {
 	#if defined FILTERSCRIPT
-		return CallRemoteFunction("ac_SetSpawnInfo", "iiiffffididid", playerid, team, skin, x, y, z, rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
+		return bool:CallRemoteFunction("ac_SetSpawnInfo", "iiiffffididid", playerid, team, skin, x, y, z, rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
 	#else
-		return ac_SetSpawnInfo(playerid, team, skin, x, y, z, rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
+		return bool:ac_SetSpawnInfo(playerid, team, skin, x, y, z, rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
 	#endif
 }
 
