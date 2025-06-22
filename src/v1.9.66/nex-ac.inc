@@ -1134,11 +1134,7 @@ ac_fpublic ac_DestroyVehicle(vehicleid)
 			foreach(new ac_i : Player)
 			{
 		#else
-			#if defined GetPlayerPoolSize
-				for(new ac_i = GetPlayerPoolSize(); ac_i >= 0; --ac_i)
-			#else
-				for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
-			#endif
+			for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
 			{
 				if(!IsPlayerConnected(ac_i)) continue;
 		#endif
@@ -1163,11 +1159,7 @@ ac_fpublic ac_DestroyPickup(pickupid)
 			foreach(new ac_i : Player)
 			{
 		#else
-			#if defined GetPlayerPoolSize
-				for(new ac_i = GetPlayerPoolSize(); ac_i >= 0; --ac_i)
-			#else
-				for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
-			#endif
+			for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
 			{
 				if(!IsPlayerConnected(ac_i)) continue;
 		#endif
@@ -1237,11 +1229,7 @@ ac_fpublic ac_EnableStuntBonusForAll(enable)
 	#if defined foreach
 		foreach(new ac_i : Player) ACInfo[ac_i][acStuntBonus] = ac_StuntBonus;
 	#else
-		#if defined GetPlayerPoolSize
-			for(new ac_i = GetPlayerPoolSize(); ac_i >= 0; --ac_i)
-		#else
-			for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
-		#endif
+		for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
 		{
 			if(!IsPlayerConnected(ac_i)) continue;
 			ACInfo[ac_i][acStuntBonus] = ac_StuntBonus;
@@ -1669,9 +1657,9 @@ ac_fpublic ac_SetVehicleHealth(vehicleid, Float:health, repair)
 	return 1;
 }
 
-ac_fpublic ac_UpdateVehicleDamageStatus(vehicleid, VEHICLE_PANEL_STATUS:panels, VEHICLE_DOOR_STATUS:doors, VEHICLE_LIGHT_STATUS:lights, VEHICLE_TYRE_STATUS:tires)
+ac_fpublic ac_UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires)
 {
-	if(!UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires)) return 0;
+	if(!UpdateVehicleDamageStatus(vehicleid, VEHICLE_PANEL_STATUS:panels, VEHICLE_DOOR_STATUS:doors, VEHICLE_LIGHT_STATUS:lights, VEHICLE_LIGHT_STATUS:tires)) return 0;
 	ACVehInfo[vehicleid][acPanels] = panels;
 	ACVehInfo[vehicleid][acDoors] = doors;
 	ACVehInfo[vehicleid][acLights] = lights;
@@ -1685,11 +1673,7 @@ ac_fpublic ac_SetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet
 	#if defined foreach
 		foreach(new ac_i : Player) ACVehInfo[vehicleid][acLocked][ac_i] = doors;
 	#else
-		#if defined GetPlayerPoolSize
-			for(new ac_i = GetPlayerPoolSize(); ac_i >= 0; --ac_i)
-		#else
-			for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
-		#endif
+		for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
 		{
 			if(!IsVehicleStreamedIn(vehicleid, ac_i)) continue;
 			ACVehInfo[vehicleid][acLocked][ac_i] = doors;
@@ -1834,11 +1818,7 @@ ac_fpublic ac_EnableAntiCheat(code, enable)
 			foreach(new ac_i : Player)
 			{
 		#else
-			#if defined GetPlayerPoolSize
-				for(new ac_i = GetPlayerPoolSize(); ac_i >= 0; --ac_i)
-			#else
-				for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
-			#endif
+			for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
 			{
 				if(!IsPlayerConnected(ac_i)) continue;
 		#endif
@@ -1872,11 +1852,7 @@ ac_fpublic ac_EnableAntiCheat(code, enable)
 			foreach(new ac_i : Player)
 			{
 		#else
-			#if defined GetPlayerPoolSize
-				for(new ac_i = GetPlayerPoolSize(); ac_i >= 0; --ac_i)
-			#else
-				for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
-			#endif
+			for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
 			{
 				if(!IsPlayerConnected(ac_i)) continue;
 		#endif
@@ -1908,11 +1884,7 @@ ac_fpublic ac_EnableAntiNOP(nopcode, enable)
 		foreach(new ac_i : Player)
 		{
 	#else
-		#if defined GetPlayerPoolSize
-			for(new ac_i = GetPlayerPoolSize(); ac_i >= 0; --ac_i)
-		#else
-			for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
-		#endif
+		for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
 		{
 			if(!IsPlayerConnected(ac_i)) continue;
 	#endif
@@ -3007,13 +2979,13 @@ stock acc_RepairVehicle(vehicleid)
 
 stock bool:orig_UpdateVehicleDamageStatus(vehicleid, VEHICLE_PANEL_STATUS:panels, VEHICLE_DOOR_STATUS:doors, VEHICLE_LIGHT_STATUS:lights, VEHICLE_TYRE_STATUS:tires) return UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
 
-stock bool:acc_UpdateVehicleDamageStatus(vehicleid, VEHICLE_PANEL_STATUS:panels, VEHICLE_DOOR_STATUS:doors, VEHICLE_LIGHT_STATUS:lights, VEHICLE_TYRE_STATUS:tires)
+stock bool:acc_UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires)
 {
-	#if defined FILTERSCRIPT
-		return bool:CallRemoteFunction("ac_UpdateVehicleDamageStatus", "idddd", vehicleid, panels, doors, lights, tires);
-	#else
-		return bool:ac_UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
-	#endif
+    #if defined FILTERSCRIPT
+        return bool:CallRemoteFunction("ac_UpdateVehicleDamageStatus", "idddd", vehicleid, panels, doors, lights, tires);
+    #else
+        return bool:ac_UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
+    #endif
 }
 
 #if defined _ALS_UpdateVehicleDamageStatus
@@ -3816,11 +3788,7 @@ public OnPlayerConnect(playerid)
 				{
 					if(ac_j == playerid) continue;
 			#else
-				#if defined GetPlayerPoolSize
-					for(new ac_j = GetPlayerPoolSize(); ac_j >= 0; --ac_j)
-				#else
-					for(new ac_j = MAX_PLAYERS - 1; ac_j >= 0; --ac_j)
-				#endif
+				for(new ac_j = MAX_PLAYERS - 1; ac_j >= 0; --ac_j)
 				{
 					#if AC_USE_NPC
 						if(ac_j == playerid || !IsPlayerConnected(ac_j) || IsPlayerNPC(ac_j)) continue;
@@ -4434,11 +4402,7 @@ public OnEnterExitModShop(playerid, enterexit, interiorid)
 			foreach(new ac_j : Player)
 			{
 		#else
-			#if defined GetPlayerPoolSize
-				for(new ac_j = GetPlayerPoolSize(); ac_j >= 0; --ac_j)
-			#else
-				for(new ac_j = MAX_PLAYERS - 1; ac_j >= 0; --ac_j)
-			#endif
+			for(new ac_j = MAX_PLAYERS - 1; ac_j >= 0; --ac_j)
 			{
 				if(!IsPlayerConnected(ac_j)) continue;
 		#endif
@@ -4452,11 +4416,7 @@ public OnEnterExitModShop(playerid, enterexit, interiorid)
 			foreach(new ac_j : Player)
 			{
 		#else
-			#if defined GetPlayerPoolSize
-				for(new ac_j = GetPlayerPoolSize(); ac_j >= 0; --ac_j)
-			#else
-				for(new ac_j = MAX_PLAYERS - 1; ac_j >= 0; --ac_j)
-			#endif
+			for(new ac_j = MAX_PLAYERS - 1; ac_j >= 0; --ac_j)
 			{
 				if(!IsPlayerConnected(ac_j)) continue;
 		#endif
@@ -7629,11 +7589,7 @@ public OnVehicleSpawn(vehicleid)
 		foreach(new ac_i : Player)
 		{
 	#else
-		#if defined GetPlayerPoolSize
-			for(new ac_i = GetPlayerPoolSize(); ac_i >= 0; --ac_i)
-		#else
-			for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
-		#endif
+		for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
 		{
 			if(!IsPlayerConnected(ac_i)) continue;
 	#endif
@@ -9906,11 +9862,7 @@ static ac_IsVehicleSeatOccupied(vehicleid, seat)
 			ACInfo[ac_i][acSeat] == seat) return 1;
 		}
 	#else
-		#if defined GetPlayerPoolSize
-			for(new ac_i = GetPlayerPoolSize(); ac_i >= 0; --ac_i)
-		#else
-			for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
-		#endif
+		for(new ac_i = MAX_PLAYERS - 1; ac_i >= 0; --ac_i)
 		{
 			if(IsPlayerConnected(ac_i) &&
 			ACInfo[ac_i][acVeh] == vehicleid &&
@@ -10119,19 +10071,13 @@ static ac_GetMaxPassengers(modelid)
 
 static ac_IpToInt(const ip[])
 {
-	#if defined sscanf
-		new ac_b0, ac_b1, ac_b2, ac_b3;
-		sscanf(ip, "p<.>iiii", ac_b3, ac_b2, ac_b1, ac_b0);
-		return (ac_b0 | ac_b1 << 8 | ac_b2 << 16 | ac_b3 << 24);
-	#else
-		new ac_bytes = strval(ip) << 24, ac_pos;
-		while(ac_pos < 15 && ip[ac_pos++] != '.'){}
-		ac_bytes += strval(ip[ac_pos]) << 16;
-		while(ac_pos < 15 && ip[ac_pos++] != '.'){}
-		ac_bytes += strval(ip[ac_pos]) << 8;
-		while(ac_pos < 15 && ip[ac_pos++] != '.'){}
-		return ac_bytes + strval(ip[ac_pos]);
-	#endif
+	new ac_bytes = strval(ip) << 24, ac_pos;
+	while(ac_pos < 15 && ip[ac_pos++] != '.'){}
+	ac_bytes += strval(ip[ac_pos]) << 16;
+	while(ac_pos < 15 && ip[ac_pos++] != '.'){}
+	ac_bytes += strval(ip[ac_pos]) << 8;
+	while(ac_pos < 15 && ip[ac_pos++] != '.'){}
+	return ac_bytes + strval(ip[ac_pos]);
 }
 
 static ac_FloodDetect(playerid, publicid)
@@ -10200,19 +10146,11 @@ static ac_KickWithCode(playerid, const ip_address[], type, code, code2 = 0)
 		{
 			if((ac_cfgFile = fopen(AC_CONFIG_FILE, io_read)))
 			{
-				#if defined sscanf
-					new ac_j;
-				#endif
 				while(fread(ac_cfgFile, ac_string) > 0)
 				{
-					#if defined sscanf
-						sscanf(ac_string, "i'//'i", ac_j, ac_i);
-						if(0 <= ac_i < sizeof ac_ACAllow) ac_ACAllow[ac_i] = !!ac_j;
-					#else
-						if((ac_i = strfind(ac_string, "//")) == -1) continue;
-						strmid(ac_strtmp, ac_string, ac_i + 2, strlen(ac_string));
-						if(0 <= (ac_i = strval(ac_strtmp)) < sizeof ac_ACAllow) ac_ACAllow[ac_i] = !!strval(ac_string);
-					#endif
+					if((ac_i = strfind(ac_string, "//")) == -1) continue;
+					strmid(ac_strtmp, ac_string, ac_i + 2, strlen(ac_string));
+					if(0 <= (ac_i = strval(ac_strtmp)) < sizeof ac_ACAllow) ac_ACAllow[ac_i] = !!strval(ac_string);
 				}
 				fclose(ac_cfgFile);
 			}
@@ -10241,19 +10179,11 @@ static ac_KickWithCode(playerid, const ip_address[], type, code, code2 = 0)
 		{
 			if((ac_cfgFile = fopen(AC_NOP_CONFIG_FILE, io_read)))
 			{
-				#if defined sscanf
-					new ac_j;
-				#endif
 				while(fread(ac_cfgFile, ac_string) > 0)
 				{
-					#if defined sscanf
-						sscanf(ac_string, "i'//'i", ac_j, ac_i);
-						if(0 <= ac_i < sizeof ac_NOPAllow) ac_NOPAllow[ac_i] = !!ac_j;
-					#else
-						if((ac_i = strfind(ac_string, "//")) == -1) continue;
-						strmid(ac_strtmp, ac_string, ac_i + 2, strlen(ac_string));
-						if(0 <= (ac_i = strval(ac_strtmp)) < sizeof ac_NOPAllow) ac_NOPAllow[ac_i] = !!strval(ac_string);
-					#endif
+					if((ac_i = strfind(ac_string, "//")) == -1) continue;
+					strmid(ac_strtmp, ac_string, ac_i + 2, strlen(ac_string));
+					if(0 <= (ac_i = strval(ac_strtmp)) < sizeof ac_NOPAllow) ac_NOPAllow[ac_i] = !!strval(ac_string);
 				}
 				fclose(ac_cfgFile);
 			}
