@@ -8849,7 +8849,7 @@ public OnVehicleStreamIn(vehicleid, forplayerid)
 		{
 			case 3, 7, 8, 14..16, 18, 22, 29, 46, 47, 51, 53, 55..59, 62..64:
 			{
-				if(ACInfo[playerid][acLastWeapon] == WEAPON_BOMB)
+				if(WEAPON:ACInfo[playerid][acLastWeapon] == WEAPON_BOMB)
 				{
 					ac_aData[PR_camMode] = 4;
 					BS_SetWriteOffset(bs, 8);
@@ -8952,16 +8952,16 @@ public OnVehicleStreamIn(vehicleid, forplayerid)
 			BS_WriteOnFootSync(bs, ac_fData);
 		}
 		new ac_gtc = GetTickCount();
-		if(ac_fData[PR_specialAction] == SPECIAL_ACTION_ENTER_VEHICLE &&
+		if(SPECIAL_ACTION:ac_fData[PR_specialAction] == SPECIAL_ACTION_ENTER_VEHICLE &&
 		ac_gtc - ACInfo[playerid][acEnterVehTick] > 3850 ||
-		ac_fData[PR_specialAction] == SPECIAL_ACTION_EXIT_VEHICLE &&
+		SPECIAL_ACTION:ac_fData[PR_specialAction] == SPECIAL_ACTION_EXIT_VEHICLE &&
 		ACInfo[playerid][acVeh] == 0 && ac_gtc - ACInfo[playerid][acGtc][15] > 1350)
 		{
 			ac_fData[PR_specialAction] = 0;
 			BS_SetWriteOffset(bs, 8);
 			BS_WriteOnFootSync(bs, ac_fData);
 		}
-		if(ac_fData[PR_weaponId] == WEAPON_BOMB && ACInfo[playerid][acCamMode] != 4)
+		if(WEAPON:ac_fData[PR_weaponId] == WEAPON_BOMB && ACInfo[playerid][acCamMode] != 4)
 		{
 			ac_fData[PR_weaponId] = 0;
 			BS_SetWriteOffset(bs, 8);
